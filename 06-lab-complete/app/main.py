@@ -126,9 +126,7 @@ class AskResponse(BaseModel):
 # Endpoints
 # ─────────────────────────────────────────────────────────
 
-@app.get("/", tags=["System"])
-def root():
-    return {"status": "alive", "instance": INSTANCE_ID, "version": settings.app_version}
+
 
 @app.post("/login", response_model=TokenResponse, tags=["Security"])
 async def login(body: LoginRequest):
