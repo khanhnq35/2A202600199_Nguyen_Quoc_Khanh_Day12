@@ -23,6 +23,7 @@ COPY --from=builder /install /usr/local
 # Copy application code
 COPY app/ ./app/
 COPY utils/ ./utils/
+COPY static/ ./static/
 COPY nginx.conf .
 
 RUN chown -R agent:agent /app

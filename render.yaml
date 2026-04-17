@@ -11,13 +11,11 @@ services:
   # ──────────────────────────────────────
   - type: web
     name: ai-agent-khanh
-    runtime: python
-    region: singapore         # Chọn region gần user nhất
-    plan: free                # free | starter | standard | pro
-    rootDir: 03-cloud-deployment/railway
-
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    runtime: docker
+    region: singapore
+    plan: free
+    rootDir: 06-lab-complete
+    healthCheckPath: /health
 
     healthCheckPath: /health   # Render check path này
 

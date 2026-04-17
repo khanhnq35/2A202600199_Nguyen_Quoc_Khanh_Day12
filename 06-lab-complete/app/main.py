@@ -20,6 +20,7 @@ from app.config import settings
 from app.auth import verify_api_key, verify_token, authenticate_user, create_token
 from app.rate_limiter import rate_limiter
 from app.cost_guard import cost_guard
+from app.session import session_manager
 from utils.mock_llm import ask as llm_ask
 
 # ─────────────────────────────────────────────────────────
@@ -54,6 +55,8 @@ async def lifespan(app: FastAPI):
     _is_ready = False
     logger.info(json.dumps({"event": "shutdown", "instance": INSTANCE_ID}))
 
+from fastapi.staticfiles import StaticFiles
+
 # ─────────────────────────────────────────────────────────
 # App & Middleware
 # ─────────────────────────────────────────────────────────
@@ -61,7 +64,8 @@ app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     lifespan=lifespan,
-    docs_url="/docs" if settings.environment != "production" else None,
+    docs_url=None,    # Hide Swagger UI
+    redoc_url=None,   # Hide Redoc
 )
 
 app.add_middleware(
@@ -147,13 +151,18 @@ async def ask_agent(
     # 2. Budget Check
     cost_guard.check_budget(user_id)
 
-    # 3. Process LLM Call
+    # 3. Process LLM Call with History
+    history = session_manager.get_history(user_id)
     input_tokens = len(body.question.split()) * 2
-    answer = llm_ask(body.question)
+    
+    # Ask LLM with context
+    answer = llm_ask(body.question, history=history)
     output_tokens = len(answer.split()) * 2
 
-    # 4. Record Usage
+    # 4. Record Usage & Update History (Redis)
     cost_guard.record_usage(user_id, input_tokens, output_tokens)
+    session_manager.add_message(user_id, "user", body.question)
+    session_manager.add_message(user_id, "bot", answer)
 
     return AskResponse(
         question=body.question,
@@ -195,6 +204,12 @@ def handle_sigterm(*args):
     _is_ready = False # Stop receiving new traffic from Load Balancer
 
 signal.signal(signal.SIGTERM, handle_sigterm)
+
+# ─────────────────────────────────────────────────────────
+# Static Files (UI)
+# ─────────────────────────────────────────────────────────
+# Mount at root / so index.html is served automatically
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 if __name__ == "__main__":
     uvicorn.run(

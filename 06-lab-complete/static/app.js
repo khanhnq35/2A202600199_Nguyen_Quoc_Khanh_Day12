@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080";
+const API_BASE = window.location.origin;
 
 // --- State Management ---
 let token = localStorage.getItem("agent_token");
