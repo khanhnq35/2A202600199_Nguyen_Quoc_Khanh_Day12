@@ -3,10 +3,14 @@ version: "3.9"
 services:
   # AI Agent Instances
   agent:
-    build: .
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
     environment:
-      - ENVIRONMENT=production
-      - APP_NAME=Production AI Agent
+      - ENVIRONMENT=development
+      - APP_NAME=Dev AI Agent
       - REDIS_URL=redis://redis:6379/0
     env_file:
       - .env.local
