@@ -11,18 +11,28 @@
 ### 1. Health Check
 ```bash
 curl https://ai-agent-khanh.onrender.com/health
-# Expected: {"status": "ok", "instance": "instance-...", "uptime": ...}
+```
+**Actual Response Log:**
+```json
+{"status":"ok","uptime_seconds":597.6,"platform":"Render","timestamp":"2026-04-17T10:25:27.769730+00:00"}
 ```
 
-### 2. API Test (with JWT Authentication)
-Để chạy lệnh này, bạn cần lấy JWT token từ endpoint `/login` trước hoặc sử dụng Dashboard UI.
-
+### 2. API Test (with X-API-Key authentication)
 ```bash
-# Gửi câu hỏi đến Agent
 curl -X POST https://ai-agent-khanh.onrender.com/ask \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "X-API-Key: YOUR_AGENT_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"user_id": "test_user", "question": "Hello Agent, how is the deployment?"}'
+  -d '{"user_id": "test", "question": "Hello Agent, this is a security test via X-API-Key."}'
+```
+**Actual Response Log:**
+```json
+{
+  "question": "Hello Agent, this is a security test via X-API-Key.",
+  "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+  "session_id": "api_client",
+  "instance": "instance-190e08",
+  "timestamp": "2026-04-17T10:27:58.144862+00:00"
+}
 ```
 
 ## Environment Variables Set

@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 import uvicorn
 
 from app.config import settings
-from app.auth import verify_api_key, verify_token, authenticate_user, create_token
+from app.auth import verify_api_key, verify_token, verify_any_auth, authenticate_user, create_token
 from app.rate_limiter import rate_limiter
 from app.cost_guard import cost_guard
 from app.session import session_manager
@@ -139,7 +139,7 @@ async def login(body: LoginRequest):
 async def ask_agent(
     body: AskRequest,
     # Priority 1: JWT Auth, Fallback: API Key
-    user: dict = Depends(verify_token), 
+    user: dict = Depends(verify_any_auth), 
 ):
     user_id = user["username"]
     
