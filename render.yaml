@@ -15,9 +15,9 @@ services:
     region: singapore
     plan: free
     rootDir: 06-lab-complete
+    dockerContext: .
+    dockerTarget: production
     healthCheckPath: /health
-
-    healthCheckPath: /health   # Render check path này
 
     autoDeploy: true           # Auto deploy khi push to GitHub
 
