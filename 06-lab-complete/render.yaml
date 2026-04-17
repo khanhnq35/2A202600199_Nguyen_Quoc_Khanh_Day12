@@ -1,23 +1,21 @@
 services:
   - type: web
-    name: ai-agent-production
+    name: ai-agent-khanh
     runtime: docker
     region: singapore
-    plan: starter
+    plan: free
+    # Khi dùng file này để deploy Blueprint, rootDir nên là '.' vì nó nằm sẵn trong folder đó
+    rootDir: .
+    dockerContext: .
+    dockerTarget: production
     healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: ENVIRONMENT
         value: production
-      - key: APP_VERSION
-        value: "1.0.0"
-      - key: OPENAI_API_KEY
-        sync: false
       - key: AGENT_API_KEY
         generateValue: true
       - key: JWT_SECRET
         generateValue: true
-      - key: DAILY_BUDGET_USD
-        value: "5.0"
-      - key: RATE_LIMIT_PER_MINUTE
-        value: "20"
+      - key: REDIS_URL
+        sync: false
