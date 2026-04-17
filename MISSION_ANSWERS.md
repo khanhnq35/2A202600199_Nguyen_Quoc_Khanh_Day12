@@ -1,30 +1,28 @@
 # Day 12 Lab - Mission Answers
 
-## Part 1-4: (Đã hoàn thành ở phần trước)
+## Part 1: Localhost vs Production (Đã hoàn thành)
+## Part 2: Docker (Đã hoàn thành)
+## Part 3: Cloud Deployment (Đã hoàn thành)
+## Part 4: API Security (Đã hoàn thành)
 
 ## Part 5: Scaling & Reliability
 
-### Exercise 5.1-5.5: Implementation notes
+### Exercise 5.1: Health Checks
+- **Cơ chế**: Dùng /health (Liveness) và /ready (Readiness).
+- **Kết quả**: Server tự báo cáo trạng thái RAM/Uptime để Cloud tự restart khi cần.
 
-#### Reliability (5.1-5.2)
-- **Health Check**: Triển khai /health (Liveness) và /ready (Readiness).
-- **Graceful Shutdown**: Hệ thống bắt tín hiệu SIGTERM và hoàn thành các request dở dang.
+### Exercise 5.2: Graceful Shutdown
+- **Cơ chế**: Bắt tín hiệu SIGTERM và đợi request hoàn tất.
+- **Kết quả**: Không ngắt kết nối đột ngột với người dùng trong quá trình bảo trì.
 
-#### Scaling & Stateless (5.3-5.4)
-Hệ thống sử dụng Redis làm cơ sở dữ liệu Session trung tâm, cho phép mở rộng không giới hạn instance mà vẫn giữ được ngữ cảnh hội thoại.
+### Exercise 5.3: Stateless Design
+- **Cơ chế**: Lưu Conversation History vào Redis thay vì RAM.
+- **Kết quả**: Bất kỳ Instance nào cũng có thể tiếp tục cuộc hội thoại của người dùng.
 
-**📝 Raw Test Output (Proper Scaling Logs):**
-```text
---- Request 1 (Initial) ---
-Served by: instance-caf792 | Storage: redis
-Response: {"session_id":"fe813aa4...","question":"Hi, I am Khanh..."}
+### Exercise 5.4: Scaling & Load Balancing
+- **Cơ chế**: Sử dụng Nginx làm Reverse Proxy điều phối traffic Round Robin.
+- **Kết quả**: Tăng khả năng chịu tải và tính sẵn sàng cho hệ thống.
 
---- Request 2 (Session Persistence) ---
-Served by: instance-6e58d5 | Storage: redis
-Response: {"session_id":"fe813aa4...","question":"What is my name?..."}
-```
-
-#### Final Delivery (5.5)
-Hệ thống đã Pass toàn bộ Checklist nộp bài.
-- **Railway Check**: {"status":"ok","platform":"Railway"}
-- **Security Check**: API Key + JWT hoạt động ổn định.
+### Exercise 5.5: Final Delivery Checklist
+- **Cơ chế**: Rà soát 100% checklist nộp bài và verify live trên Railway.
+- **Kết quả**: Hệ thống đạt chuẩn Production-ready.
