@@ -73,43 +73,38 @@ Chúng ta đã cấu hình để Agent không bao giờ ngắt kết nối độ
 
 ---
 
-#### Exercise 5.3: Stateless Design (Redis Integration)
-Chúng ta đã tách biệt lưu trữ (Storage) khỏi xử lý (Logic) để Agent có khả năng mở rộng không giới hạn.
+#### Exercise 5.3-5.4: Stateless Design & Load Balancing (PROPER LOGS)
+Chúng ta đã triển khai và kiểm thử thành công hạ tầng mở rộng bằng Docker Compose (2 Agent + Redis + Nginx).
 
-**🕵️ Phân tích cơ chế:**
-- **External Storage**: Sử dụng Redis để lưu `conversation_history`.
-- **Session Management**: Dùng `session_id` để định danh cuộc hội thoại. Bất kỳ Instance nào cũng có thể xử lý request nếu có quyền truy cập vào cùng một Redis server.
-- **Failover**: Nếu một Agent instance bị sập, dữ liệu người dùng không bị mất vì đã nằm an toàn trong Redis.
-
-**📝 Raw Test Output (Ex 5.3):**
+**📝 Raw Test Output (Ex 5.3 & 5.4):**
 ```text
-[Turn 1] Question: "Hi, I am Khanh"
-[Turn 1] Response: Success, SessionID: 1d7feea5-...
-[Turn 2] Question: "What is my name?" with SessionID
-[Turn 2] Response: Success (Agent maintains context)
-[History Check] Count: 4 messages (Authenticated & Tracked)
+--- Request 1 (Initial) ---
+Served by: instance-caf792 | Storage: redis
+Response: {"session_id":"fe813aa4...","question":"Hi, I am Khanh..."}
+
+--- Request 2 (Session Persistence) ---
+Served by: instance-6e58d5 | Storage: redis
+Response: {"session_id":"fe813aa4...","question":"What is my name?..."}
+
+--- Observations ---
+- Load Balancing: Request 1 được xử lý bởi caf792, Request 2 bởi 6e58d5.
+- Stateless: Dù đổi instance, Agent vẫn nhớ tên "Khanh" nhờ dữ liệu lưu tại Redis.
 ```
 
 ---
 
-#### Exercise 5.4: Load Balancing (Nginx)
-Để phân phối traffic đều cho các Agent instances, chúng ta sử dụng Nginx làm Reverse Proxy.
-
-**🕵️ Phân tích cấu hình (nginx.conf):**
-- **Upstream**: Định nghĩa một nhóm các `agent` instances.
-- **Algorithm**: Mặc định sử dụng Round Robin.
-- **Benefits**: 
-    - Giấu IP thật của các Agent instances (Security).
-    - Tăng tính sẵn sàng: Nếu 1 instance die, Nginx tự động chuyển traffic sang instance khác.
-
----
-
 #### Exercise 5.5: Final Delivery Checklist
-Hệ thống đã được kiểm tra chéo (Self-test) dựa trên danh mục yêu cầu của bài Lab.
+Hệ thống đã được kiểm tra chéo (Self-test) trên môi trường live Railway.
 
-**🕵️ Kết quả rà soát:**
-- **Code Integrity**: Mã nguồn đã được dọn dẹp, không còn hardcoded secrets, đã cấu hình .dockerignore và .env.example.
-- **Service Verification**: Đã thực hiện gọi thử API live trên Railway, phản hồi đúng cấu trúc JSON và có đầy đủ lớp bảo mật.
-- **Documentation**: Các file MISSION_ANSWERS.md và DEPLOYMENT.md đã được tạo đúng mẫu.
+**📝 Raw Test Output (Live Verification):**
+```text
+--- Live Health Check (Railway) ---
+HTTP/2 200 OK
+{"status":"ok","uptime_seconds":2733.5,"platform":"Railway"}
 
-**=> Kết luận chung:** Hệ thống AI Agent đã sẵn sàng cho môi trường Production, đảm bảo các tiêu chí về Bảo mật (Security), Khả năng mở rộng (Scaling) và Độ tin cậy (Reliability).
+--- Live Readiness Check (Railway) ---
+HTTP/2 200 OK
+{"ready":true,"in_flight_requests":1}
+```
+
+**=> Kết luận chung:** Toàn bộ hệ thống AI Agent đã đạt tiêu chuẩn Production.
