@@ -1,0 +1,15 @@
+=== RAW OUTPUT EX 5.4 (Scaling & Stateless Demo - PROPER) ===
+
+--- Request 1 (Initial) ---
+Response: {"session_id":"fe813aa4-e37e-4301-94aa-5bd9df9522ca","question":"Hi, I am Khanh. Test turn 1.","answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","turn":2,"served_by":"instance-caf792","storage":"redis"}
+
+--- Request 2 (History Context) ---
+Response: {"session_id":"fe813aa4-e37e-4301-94aa-5bd9df9522ca","question":"What is my name? Test turn 2.","answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","turn":3,"served_by":"instance-6e58d5","storage":"redis"}
+
+--- Request 3 (Load Balancing Verification) ---
+{"session_id":"fe813aa4-e37e-4301-94aa-5bd9df9522ca","question":"Check LB - request 3","answer":"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.","turn":4,"served_by":"instance-caf792","storage":"redis"}
+{"session_id":"fe813aa4-e37e-4301-94aa-5bd9df9522ca","question":"Check LB - request 4","answer":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","turn":5,"served_by":"instance-6e58d5","storage":"redis"}
+{"session_id":"fe813aa4-e37e-4301-94aa-5bd9df9522ca","question":"Check LB - request 5","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","turn":6,"served_by":"instance-caf792","storage":"redis"}
+
+--- Final Conversation History ---
+{"session_id":"fe813aa4-e37e-4301-94aa-5bd9df9522ca","messages":[{"role":"user","content":"Hi, I am Khanh. Test turn 1.","timestamp":"2026-04-17T09:24:39.949232+00:00"},{"role":"assistant","content":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","timestamp":"2026-04-17T09:24:40.089567+00:00"},{"role":"user","content":"What is my name? Test turn 2.","timestamp":"2026-04-17T09:24:40.191061+00:00"},{"role":"assistant","content":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","timestamp":"2026-04-17T09:24:40.303980+00:00"},{"role":"user","content":"Check LB - request 3","timestamp":"2026-04-17T09:24:40.326048+00:00"},{"role":"assistant","content":"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.","timestamp":"2026-04-17T09:24:40.445126+00:00"},{"role":"user","content":"Check LB - request 4","timestamp":"2026-04-17T09:24:40.474205+00:00"},{"role":"assistant","content":"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.","timestamp":"2026-04-17T09:24:40.579858+00:00"},{"role":"user","content":"Check LB - request 5","timestamp":"2026-04-17T09:24:40.595797+00:00"},{"role":"assistant","content":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","timestamp":"2026-04-17T09:24:40.747844+00:00"}],"count":10}

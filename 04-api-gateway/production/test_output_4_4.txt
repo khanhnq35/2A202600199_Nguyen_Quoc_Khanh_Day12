@@ -1,0 +1,25 @@
+=== RAW OUTPUT PART 4.4 (Cost Guard Simulation) ===
+1. First Request (Consuming tokens):
+HTTP/1.1 200 OK
+date: Fri, 17 Apr 2026 08:57:44 GMT
+server: uvicorn
+content-length: 276
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"question":"Give me a very long explanation about AI architecture to consume tokens.","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","usage":{"requests_remaining":9,"budget_remaining_usd":2.4e-05}}
+2. Second Request (Expecting 402 Budget Exceeded):
+HTTP/1.1 402 Payment Required
+date: Fri, 17 Apr 2026 08:57:44 GMT
+server: uvicorn
+content-length: 109
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"detail":{"error":"Daily budget exceeded","used_usd":2.4e-05,"budget_usd":1e-05,"resets_at":"midnight UTC"}}

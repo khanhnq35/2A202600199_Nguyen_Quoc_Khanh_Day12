@@ -1,0 +1,43 @@
+=== RAW OUTPUT PART 4.2 ===
+1. Login (student):
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHVkZW50Iiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzY0MTYwNzgsImV4cCI6MTc3NjQxOTY3OH0.vGk7vXYkAHVMpeQ1OtsbIoRQ3h-YpiWEfpMh5px6yuE","token_type":"bearer","expires_in_minutes":60,"hint":"Include in header: Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."}
+
+2. Authorized Request (/ask):
+HTTP/1.1 200 OK
+date: Fri, 17 Apr 2026 08:54:38 GMT
+server: uvicorn
+content-length: 212
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"question":"Test JWT","answer":"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.","usage":{"requests_remaining":9,"budget_remaining_usd":2.1e-05}}
+3. Unauthorized Request (User -> Admin Endpoint):
+HTTP/1.1 403 Forbidden
+date: Fri, 17 Apr 2026 08:54:38 GMT
+server: uvicorn
+content-length: 23
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"detail":"Admin only"}
+4. Login (teacher - Admin):
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZWFjaGVyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc2NDE2MDc5LCJleHAiOjE3NzY0MTk2Nzl9.llY-Yo_v8Y_xm24UhVZQhlcqIkzG1-qMAN4tecJlc8I","token_type":"bearer","expires_in_minutes":60,"hint":"Include in header: Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."}
+
+5. Authorized Admin Request (/admin/stats):
+HTTP/1.1 200 OK
+date: Fri, 17 Apr 2026 08:54:38 GMT
+server: uvicorn
+content-length: 104
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-xss-protection: 1; mode=block
+referrer-policy: strict-origin-when-cross-origin
+
+{"total_users":"N/A (in-memory demo)","global_cost_usd":2.1000000000000002e-05,"global_budget_usd":10.0}

@@ -1,0 +1,25 @@
+=== RAW OUTPUT PART 4.1 ===
+1. No Key Request:
+HTTP/1.1 401 Unauthorized
+date: Fri, 17 Apr 2026 08:54:24 GMT
+server: uvicorn
+content-length: 67
+content-type: application/json
+
+{"detail":"Missing API key. Include header: X-API-Key: <your-key>"}
+2. Wrong Key Request:
+HTTP/1.1 403 Forbidden
+date: Fri, 17 Apr 2026 08:54:24 GMT
+server: uvicorn
+content-length: 29
+content-type: application/json
+
+{"detail":"Invalid API key."}
+3. Correct Key Request:
+HTTP/1.1 200 OK
+date: Fri, 17 Apr 2026 08:54:24 GMT
+server: uvicorn
+content-length: 114
+content-type: application/json
+
+{"question":"hello","answer":"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé."}

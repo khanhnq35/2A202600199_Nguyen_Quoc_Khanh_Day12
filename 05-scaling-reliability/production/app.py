@@ -25,6 +25,7 @@ from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
 
+from typing import Optional
 from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -118,7 +119,7 @@ app.add_middleware(
 
 class ChatRequest(BaseModel):
     question: str
-    session_id: str | None = None  # None = tạo session mới
+    session_id: Optional[str] = None  # None = tạo session mới
 
 
 # ──────────────────────────────────────────────────────────
@@ -217,4 +218,4 @@ def ready():
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
