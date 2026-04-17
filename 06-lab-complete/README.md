@@ -24,19 +24,30 @@ Kết hợp TẤT CẢ những gì đã học trong 1 project hoàn chỉnh.
 ```
 06-lab-complete/
 ├── app/
-│   ├── main.py         # Entry point — kết hợp tất cả
-│   ├── config.py       # 12-factor config
-│   ├── auth.py         # API Key + JWT
-│   ├── rate_limiter.py # Rate limiting
-│   └── cost_guard.py   # Budget protection
-├── Dockerfile          # Multi-stage, production-ready
-├── docker-compose.yml  # Full stack
-├── railway.toml        # Deploy Railway
-├── render.yaml         # Deploy Render
-├── .env.example        # Template
-├── .dockerignore
-└── requirements.txt
+│   ├── main.py         # Entry point — Unified Backend + UI
+│   ├── ...
+├── static/             # High-Tech UI Dashboard (HTML/CSS/JS)
+├── utils/
+│   └── mock_llm.py     # Smart Mock LLM with memory
+├── Dockerfile          # Unified Multi-stage build
+├── ...
 ```
+
+---
+
+## 🎨 Integrated UI Dashboard
+Hệ thống hiện đã tích hợp sẵn giao diện Web. Truy cập địa chỉ gốc (`/`) để sử dụng:
+- **Xác thực JWT**: Đăng nhập trực tiếp trên web.
+- **Trí nhớ (Memory)**: Agent nhớ tên bạn qua Redis.
+- **Theo dõi Instance**: Xem ID container đang xử lý request.
+
+---
+
+## ⚙️ Thông số Production (Lab 06 Compliance)
+- **Rate Limit**: 10 requests / minute.
+- **Daily Budget**: $10.0.
+- **Auth**: API Key + JWT (Bearer).
+- **Storage**: Stateless (Redis support).
 
 ---
 
