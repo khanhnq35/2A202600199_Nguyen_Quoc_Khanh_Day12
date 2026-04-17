@@ -243,6 +243,40 @@ Chúng ta đã nâng cấp hệ thống bảo mật từ API Key tĩnh sang JWT 
 | `/ask` | Thành công (200) | Thành công (200) | Cả 2 đều có quyền hỏi Agent |
 | `/admin/stats`| **Bị chặn (403)** | **Thành công (200)** | Phân quyền đúng theo thiết kế |
 
+---
+
+## Report: Lab Task 4.3 - Rate Limiting (Giới hạn truy cập)
+
+Cơ chế này ngăn chặn việc spam request làm quá tải hệ thống hoặc tiêu tốn tài nguyên LLM.
+
+### 🕵️ Phân tích cơ chế
+- **Thuật toán**: Sliding Window Counter (Cửa sổ trượt 60 giây).
+- **Phân cấp (Tiers)**: 
+    - `User`: 10 requests / phút.
+    - `Admin`: 100 requests / phút.
+- **Header**: Trả về `X-RateLimit-Remaining` để client tự điều tiết tốc độ gọi API.
+
+### ✅ Kết quả thử nghiệm thực tế (Local)
+Tôi đã spam 12 request liên tiếp bằng tài khoản `student`:
+
+```text
+--- Request 1-10 ---
+HTTP/1.1 200 OK
+{"question":"Request 1...10","usage":{"requests_remaining":9...0}}
+
+--- Request 11-12 ---
+HTTP/1.1 429 Too Many Requests
+{
+  "detail": {
+    "error": "Rate limit exceeded",
+    "limit": 10,
+    "retry_after_seconds": 59
+  }
+}
+```
+
+**=> Kết luận:** Chức năng Rate Limit hoạt động ổn định, bảo vệ server khỏi các cuộc tấn công brute-force hoặc spam API.
+
 ### 📝 Raw Test Output (Task 4.2)
 ```text
 1. Login (student):
