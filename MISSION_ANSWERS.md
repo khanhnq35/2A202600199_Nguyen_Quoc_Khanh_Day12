@@ -26,3 +26,14 @@
 ### Exercise 5.5: Final Delivery Checklist
 - **Cơ chế**: Rà soát 100% checklist nộp bài và verify live trên Railway.
 - **Kết quả**: Hệ thống đạt chuẩn Production-ready.
+
+---
+
+## Bonus: AI Agent High-Tech Dashboard (UI Demo)
+
+Chúng ta đã xây dựng thành công giao diện Web chuyên nghiệp để tương tác với Agent.
+- **Tính năng**: Login JWT, Chat thời gian thực, Monitor Instance ID.
+- **Thẩm mỹ**: Modern Glassmorphism Design.
+- **Vị trí**: /07-ui-demo/index.html
+
+**Kết thúc Day 12 với sự hài lòng tuyệt đối!** 🏁

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Dashboard | Production Ready</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="overlay">
+        <div class="glass-card login-card">
+            <h1>🔒 AI Agent Access</h1>
+            <p>Please login to your secure portal</p>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" required value="student">
+                <input type="password" id="password" placeholder="Password" required value="demo123">
+                <button type="submit">Unlock Dashboard</button>
+            </form>
+            <div id="login-msg" class="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="container main-layout">
+        <header class="glass-card top-bar">
+            <div class="logo">
+                <span class="pulse"></span>
+                AI Agent <small>Production v1.0</small>
+            </div>
+            <div class="status-indicators">
+                <div class="status-item">
+                    <span id="status-dot" class="dot"></span>
+                    <span id="status-text">Connecting...</span>
+                </div>
+                <button id="logout-btn" class="btn-small">Logout</button>
+            </div>
+        </header>
+
+        <div class="content-grid">
+            <!-- Sidebar / Metrics -->
+            <aside class="glass-card sidebar">
+                <h3>Monitor</h3>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <label>Current Instance</label>
+                        <div id="instance-id" class="value">---</div>
+                    </div>
+                    <div class="metric-card">
+                        <label>Daily Budget</label>
+                        <div id="cost-display" class="value">$0.0000</div>
+                    </div>
+                    <div class="metric-card">
+                        <label>Auth Role</label>
+                        <div id="user-role" class="value">Guest</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <main class="glass-card chat-container">
+                <div id="chat-history" class="chat-history">
+                    <div class="message bot">
+                        Hello! I am your production AI agent. How can I help you today?
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Type your message here..." autocomplete="off">
+                    <button id="send-btn">Send</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
