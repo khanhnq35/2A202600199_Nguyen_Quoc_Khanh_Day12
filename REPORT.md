@@ -166,5 +166,103 @@ Chúng ta đã đưa ứng dụng AI Agent từ môi trường local lên Cloud 
 | **Health Check** | `/health` | **200 OK** | Trả về thông tin uptime và confirm nền tảng `Railway`. |
 | **Agent Ask** | `/ask` | **200 OK** | Phản hồi chính xác với JSON body. |
 
-**=> Kết luận:** AI Agent đã sẵn sàng hoạt động 24/7 và có thể truy cập được từ bất kỳ đâu qua Internet.
+---
+
+## Report: Lab Task 3.2 - Cloud Deployment (Render Blueprint)
+
+Chúng ta đã triển khai thêm một phiên bản dự phòng trên Render bằng phương pháp Infrastructure as Code (Blueprint).
+
+### 🛠️ So sánh Railway vs Render
+
+| Tiêu chí | Railway | Render (Blueprint) |
+|----------|---------|-------------------|
+| **Phương thức** | CLI-based (`railway up`) | Git-based (`render.yaml`) |
+| **Độ phủ** | Đơn giản, nhanh gọn. | Quản lý hạ tầng bằng code chuyên nghiệp. |
+| **Khả năng Scaling** | Thủ công qua Dashboad. | Tự động định nghĩa Resource qua YAML. |
+| **Public URL** | [outstanding-manifestation...](https://outstanding-manifestation-production-c4c3.up.railway.app) | [ai-agent-khanh.onrender.com](https://ai-agent-khanh.onrender.com/) |
+
+### ✅ Kết quả kiểm tra Render
+- **Status**: Live 🟢
+- **Health Check**: `https://ai-agent-khanh.onrender.com/health` -> **Success**
+- **Mock LLM**: Phản hồi tốt tương tự phiên bản Railway.
+
+---
+
+## Report: Lab Task 4.1 - API Key Authentication
+
+Chúng ta đã triển khai lớp bảo vệ đầu tiên cho API bằng cơ chế kiểm tra Header Token.
+
+### 🕵️ Phân tích Code
+- **Cơ chế**: Sử dụng `APIKeyHeader` của FastAPI để bắt header `X-API-Key`.
+- **Logic kiểm tra**: Hàm `verify_api_key` so khớp key từ Header với biến môi trường `AGENT_API_KEY`.
+- **Xử lý lỗi**:
+    - Thiếu Key: Trả về **401 Unauthorized**.
+    - Sai Key: Trả về **403 Forbidden**.
+- **Ưu điểm**: Đơn giản, dễ triển khai cho hệ thống B2B hoặc tích hợp nội bộ.
+- **Nhược điểm**: Key cố định, khó quản lý khi có hàng ngàn user khác nhau (cần chuyển sang JWT).
+
+### ✅ Kết quả Unit Test (Local)
+| Request Header | Status Code | Phản hồi |
+|----------------|-------------|----------|
+| (Empty) | **401** | Missing API key |
+| `X-API-Key: wrong-key` | **403** | Invalid API key |
+| `X-API-Key: my-secret-123` | **200** | Success (Mock Agent response) |
+
+### 📝 Raw Test Output (Task 4.1)
+```text
+1. No Key Request:
+HTTP/1.1 401 Unauthorized
+{"detail":"Missing API key. Include header: X-API-Key: <your-key>"}
+
+2. Wrong Key Request:
+HTTP/1.1 403 Forbidden
+{"detail":"Invalid API key."}
+
+3. Correct Key Request:
+HTTP/1.1 200 OK
+{"question":"hello","answer":"Agent đang hoạt động tốt! (mock response)..."}
+```
+
+---
+
+## Report: Lab Task 4.2 - JWT Authentication (Advanced)
+
+Chúng ta đã nâng cấp hệ thống bảo mật từ API Key tĩnh sang JWT (JSON Web Token) động và phân quyền theo vai trò (RBAC).
+
+### 🏛️ Phân tích cơ chế
+- **Stateless**: Server không cần lưu session, mọi thông tin (username, role) nằm trong Token.
+- **Phân quyền (RBAC)**: 
+    - `user`: Chỉ được gọi endpoint `/ask`.
+    - `admin`: Được phép truy cập `/admin/stats` để theo dõi hệ thống.
+- **Security Headers**: Đã cấu hình các header bảo mật (`X-Frame-Options`, `X-Content-Type-Options`) và ẩn thông tin Server.
+
+### ✅ Kết quả kiểm thử phân quyền
+| API Endpoint | Role: User (student) | Role: Admin (teacher) | Ý nghĩa |
+|--------------|----------------------|-----------------------|---------|
+| `/auth/token`| Thành công (200) | Thành công (200) | Cấp Token đúng định dạng JWT |
+| `/ask` | Thành công (200) | Thành công (200) | Cả 2 đều có quyền hỏi Agent |
+| `/admin/stats`| **Bị chặn (403)** | **Thành công (200)** | Phân quyền đúng theo thiết kế |
+
+### 📝 Raw Test Output (Task 4.2)
+```text
+1. Login (student):
+{"access_token":"eyJhbGciOiJIUzI1NiI...","token_type":"bearer",...}
+
+2. Authorized Request (/ask):
+HTTP/1.1 200 OK
+{"question":"Test JWT","answer":"Đây là câu trả lời từ AI agent (mock)..."}
+
+3. Unauthorized Request (User -> Admin Endpoint):
+HTTP/1.1 403 Forbidden
+{"detail":"Admin only"}
+
+4. Login (teacher - Admin):
+{"access_token":"eyJhbGciOiJIUzI1NiI...","token_type":"bearer",...}
+
+5. Authorized Admin Request (/admin/stats):
+HTTP/1.1 200 OK
+{"total_users":"N/A (in-memory demo)","global_cost_usd":2.1e-05,...}
+```
+
+**=> Kết luận:** Hệ thống đã đạt tiêu chuẩn sản xuất (Production-ready) về mặt bảo mật và phân quyền.
 
