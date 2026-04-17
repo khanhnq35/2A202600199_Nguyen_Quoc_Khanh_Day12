@@ -265,4 +265,32 @@ HTTP/1.1 200 OK
 ```
 
 **=> Kết luận:** Hệ thống đã đạt tiêu chuẩn sản xuất (Production-ready) về mặt bảo mật và phân quyền.
+ 
++---
++
++## Report: Lab Task 4.4 - Cost Guard (Ngăn chặn cháy túi)
++
++Tính năng này bảo vệ chủ sở hữu Agent khỏi các hóa đơn API khổng lồ nếu hệ thống bị lạm dụng.
++
++### 🕵️ Phân tích cơ chế
++- **Cơ chế**: Theo dõi token usage (input/output) theo thời gian thực.
++- **Ngân sách**: 
++    - User: $1.0/ngày.
++    - Global: $10.0/ngày.
++- **Xử lý vi phạm**: Trả về lỗi **402 Payment Required** ngay lập tức và chặn hoàn toàn các yêu cầu tiếp theo trong ngày.
++
++### ✅ Kết quả thử nghiệm mô phỏng (Simulated Breach)
++Tôi đã hạ ngân sách xuống cực thấp ($0.00001) để kiểm tra:
++
++```text
++1. First Request:
++HTTP/1.1 200 OK
++{"usage":{"requests_remaining":9,"budget_remaining_usd":2.4e-05}}
++
++2. Second Request (Sau khi vượt ngưỡng 0.00001):
++HTTP/1.1 402 Payment Required
++{"detail":{"error":"Daily budget exceeded","used_usd":2.4e-05,"budget_usd":1e-05}}
++```
++
++**=> Kết luận:** Hệ thống chốt chặn tài chính hoạt động hoàn hảo, đảm bảo an toàn kinh tế cho chủ hệ thống.
 
