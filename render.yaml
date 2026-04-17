@@ -16,7 +16,6 @@ services:
     plan: free
     rootDir: 06-lab-complete
     dockerContext: .
-    dockerTarget: production
     healthCheckPath: /health
 
     autoDeploy: true           # Auto deploy khi push to GitHub
