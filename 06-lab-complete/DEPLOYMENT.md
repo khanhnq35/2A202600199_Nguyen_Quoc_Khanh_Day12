@@ -1,7 +1,9 @@
-# Deployment Information - AI Agent Production (Lab 06)
+# Deployment Report — Lab 06 Complete (Production AI Agent)
 
-## Public URL
-**URL**: [https://ai-agent-khanh.onrender.com/](https://ai-agent-khanh.onrender.com/)
+**Project Name:** AI Agent Unified Production Stack
+**Deployment Platform:** Render (Docker Runtime)
+**Live URL:** [https://ai-agent-khanh.onrender.com/](https://ai-agent-khanh.onrender.com/)
+**GitHub Repository:** [https://github.com/khanhnq35/06-lab-day12](https://github.com/khanhnq35/06-lab-day12)
 
 ## Platform
 **Render** (Infrastructure as Code via `render.yaml`)
